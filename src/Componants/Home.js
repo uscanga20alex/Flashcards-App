@@ -1,35 +1,33 @@
-import { useEffect, useParams, useRouteMatch, useState } from "react";
+import { useEffect, useState } from "react";
 import React from "react";
-import { Link, Route } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { listDecks, deleteDeck } from "../utils/api";
 
 function Home (){
-    const [deck, setDeck] = useState();
+    const [decks, setDeck] = useState();
 
     useEffect(() => {
-        async function loadDecks () => {
-            try {
-              const decks = await fetch;
-            setDeck(loadDecks);  //
-            }
-            
+        const loadDecks = async () => {
+            const loadedDecks = await listDecks();
+            setDeck(loadedDecks);
         }
-        loadDecks;
+        loadDecks();
     }, []);
 
-    handleDelete = async (deckId) => {
+    const handleDelete = async (deckId) => {
         if (window.confirm("Are you sure you want to delete?")){
             await deleteDeck(deckId);
-            setDeck(decks.filte((desk) => desk.id !== deskId));
+            setDeck(decks.filter((deck) => deck.id !== deckId));
         }
     };
 
     return (
         <div>
             <h1>Decks</h1>
-            {desks.map((deck) => (
+            {decks.map((deck) => (
                 <div key={deck.id}>
                     <h2>{deck.name}</h2>
-                    <p>{desk.description}</p>
+                    <p>{deck.description}</p>
                     <Link to={`/decks/${deck.id}/study`} className="btn btn-secondary">
                         View
                     </Link>
@@ -41,6 +39,9 @@ function Home (){
                     </button>
                     </div>
             ))}
+            <Link to="/decks/new" className="btn btn-primary">
+                Create Deck
+            </Link>
         </div>
     )
 }
