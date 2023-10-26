@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Link, Route  } from "react-router-dom";
+import { Switch, Route  } from "react-router-dom";
 import Layout from "./Layout";
 import "./App.css";
 import AddDeck from "./Componants/AddDeck";
@@ -17,10 +17,8 @@ import Study from "./Componants/Study";
 function App() {
   return (
     <div className="app-routes">
+      <Layout />
       <Switch>
-        <Route path="/">
-          <Layout />
-        </Route>
         <Route exact path="/">
           <Home />
         </Route>

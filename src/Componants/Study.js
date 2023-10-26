@@ -42,7 +42,7 @@ function Study() {
         return(
             <div>
                 <h1>Not enough cards</h1>
-                <Link to={`/decks/${decksId}/cards/new`} className="btn btn-primary">
+                <Link to="/decks/new" className="btn btn-primary">
                 Add Cards
                 </Link>
                 <Link to="/" className="btn btn-secondary">
@@ -55,22 +55,24 @@ function Study() {
         <div>
             <h1>Study: {deck.name}</h1>
             <div>
-                <div className="card">
+                {cards[currentCardIndex] && (
+                    <div className="card">
                     <div className="card-body">
                         <h5 className="card-title">
-                            Card {currentCardIndex + 1} of {cards.length}
+                        Card {currentCardIndex + 1} of {cards.length}
                         </h5>
                         <p className="card-text">
-                            {isFlipped ? cards[currentCardIndex].back : cards[currentCardIndex].front}
+                        {isFlipped ? cards[currentCardIndex].back : cards[currentCardIndex].front}
                         </p>
                         <button className="btn btn-secondary" onClick={handleFlip}>
-                            {isFlipped ? 'Flip Back' : 'Flip'}
+                        {isFlipped ? 'Flip Back' : 'Flip'}
                         </button>
                         <button className="btn btn-primary" onClick={handleNext}>
-                            Next
+                        Next
                         </button>
                     </div>
-                </div>
+                    </div>
+                )}
             </div>
         </div>
     )
