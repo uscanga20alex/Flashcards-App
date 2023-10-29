@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { listDecks, deleteDeck } from "../utils/api";
 
 function Home (){
-    const [decks, setDeck] = useState();
+    const [decks, setDeck] = useState([]);
 
     useEffect(() => {
         const loadDecks = async () => {
@@ -23,6 +23,9 @@ function Home (){
 
     return (
         <div>
+            <Link to="/decks/new" className="btn btn-primary">
+                Create Deck
+            </Link>
             <h1>Decks</h1>
             {decks.map((deck) => (
                 <div key={deck.id}>
@@ -39,9 +42,7 @@ function Home (){
                     </button>
                     </div>
             ))}
-            <Link to="/decks/new" className="btn btn-primary">
-                Create Deck
-            </Link>
+            
         </div>
     )
 }

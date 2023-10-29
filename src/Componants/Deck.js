@@ -5,14 +5,28 @@ import { useParams, Link } from "react-router-dom/cjs/react-router-dom.min";
 function Deck(){
     const { deckId } = useParams();
     const [deck, setDeck] = useState();
+    const [card, setCard] = useState({})
 
     useEffect(() => {
-        const loadDeck = async () => {
-            const loadedDeck = await readDeck(deckId);
-            setDeck(loadedDeck);
+      const abortController = new AbortController();
+      const signal = abortController.signal;
+      async function loadDeck(){
+        try{
+          const loadedDeck = await fetch (readDeck(deckId), {signal});
+          setDeck(loadedDeck);
+          setCard(loadedDeck.card[0])
         }
-        loadDeck()
-    }, [deckId]);
+        catch (error){
+          if(error.name === "Abort Error"){
+            console.log("Aborted");
+          } else {
+            throw error;
+          }
+        }
+      }
+        loadDeck();
+        return() => abortController.abort();
+      }, [deckId]);
 
     const handleDelete = async () => {
         if(window.confirm("Are you sure you want to delete?")){

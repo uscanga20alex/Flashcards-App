@@ -8,16 +8,35 @@ function Study() {
     const [deck, setDeck] = useState();
     const [currentCardIndex, setCurrentCardIndex] = useState(null);
     const [isFlipped, setIsFlipped] = useState(false);
+    const [card, setCard] = useState({});
 
     useEffect(() => {
-        const loadDeck = async () => {
-            const loadedDeck = await readDeck(deckId);
+        const abortController = new AbortController();
+        const signal = abortController.signal;
+        async function loadDeck(){
+          try{
+            const loadedDeck = await fetch (readDeck(deckId), {signal});
             setDeck(loadedDeck);
+            setCard(loadedDeck.card)
+          }
+          catch (error){
+            if(error.name === "Abort Error"){
+              console.log("Aborted");
+            } else {
+              throw error;
+            }
+          }
         }
-        loadDeck();
-    }, [deckId]);
+          loadDeck();
+          return() => abortController.abort();
+        }, [deckId]);
 
-    const cards = deck?.cards || [];
+        let cards;
+        if (deck) {
+          cards = deck.cards || [];
+        } else {
+          cards = [];
+  }
 
     const handleFlip = () => {
         setIsFlipped(!isFlipped);
@@ -53,24 +72,51 @@ function Study() {
     }
     return (
         <div>
-            <h1>Study: {deck.name}</h1>
             <div>
-                {cards[currentCardIndex] && (
-                    <div className="card">
-                    <div className="card-body">
-                        <h5 className="card-title">
-                        Card {currentCardIndex + 1} of {cards.length}
-                        </h5>
-                        <p className="card-text">
-                        {isFlipped ? cards[currentCardIndex].back : cards[currentCardIndex].front}
-                        </p>
-                        <button className="btn btn-secondary" onClick={handleFlip}>
-                        {isFlipped ? 'Flip Back' : 'Flip'}
-                        </button>
-                        <button className="btn btn-primary" onClick={handleNext}>
-                        Next
-                        </button>
+                <nav aria-label="breadcrumb">
+                    <ol className="breadcrumb">
+                    <li className="breadcrumb-item">
+                        <Link to="/">Home</Link>
+                    </li>
+                    <li className="breadcrumb-item active" aria-current="page">
+                        { deck.name }
+                    </li>
+                    <li className="breadcrubm-item active" aria-current="page">Study</li>
+                    </ol>
+                </nav>
+            </div>
+            <div className="container mt-4">
+                <div className="row">
+                    <div className="col-12">
+                        <h2>Study: {deck.name}</h2>
                     </div>
+                </div>
+                {cards.length > 0 ? (
+                    <div className="row">
+                        <div className="col-12">
+                            <div className="card">
+                                <div className="card-body">
+                                    <h5 className="card-title">
+                                        Card {currentCardIndex + 1} of {cards.length}
+                                    </h5>
+                                    <p className="card-text">
+                                        {isFlipped ? cards[currentCardIndex].back : cards[currentCardIndex].front}
+                                    </p>
+                                    <button className="btn btn-secondary" onClick={handleFlip}>
+                                        {isFlipped ? "Flip Back" : "Flip"}
+                                    </button>
+                                    <button className="btn btn-primary" onClick={handleNext}>
+                                        {currentCardIndex === cards.length - 1 ? "Restart" : "Next"}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="row">
+                        <div className="col-12">
+                            <p>There are no cards in this deck.</p>
+                        </div>
                     </div>
                 )}
             </div>
