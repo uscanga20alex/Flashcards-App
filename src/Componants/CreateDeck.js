@@ -3,12 +3,11 @@ import { Link ,useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { createDeck } from "../utils/api";
 
 function CreateDeck(){
+    const history = useHistory();
     const [deck, setDeck] = useState({
         name:'',
         description:'',
     });
-
-    const history = useHistory();
 
     const handleChange = (event) => {
         setDeck({

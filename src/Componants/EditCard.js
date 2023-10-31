@@ -6,19 +6,29 @@ function EditCard() {
   const history = useHistory();
   const { deckId, cardId } = useParams();
   const [deck, setDeck] = useState({});
-  const [card, setCard] = useState({ front: '', back: '' });
+  const [card, setCard] = useState({ front: '', back: '', });
 
   useEffect(() => {
-    async function loadDeckAndCard() {
-      const loadedDeck = await readDeck(deckId);
-      setDeck(loadedDeck);
-
-      const loadedCard = await readCard(cardId);
-      setCard(loadedCard);
+    const abortController = new AbortController();
+    const signal = abortController.signal;
+    async function loadDeckAndCards(){
+      try{
+        const loadedDeck = await readDeck(deckId);
+        const loadedCard = await readCard(cardId);
+        setDeck(loadedDeck);
+        setCard(loadedCard);
+      }
+      catch (error){
+        if(error.name === "Abort Error"){
+          console.log("Aborted");
+        } else {
+          throw error;
+        }
+      }
     }
-
-    loadDeckAndCard();
-  }, [deckId, cardId]);
+      loadDeckAndCards();
+      return() => abortController.abort();
+    }, [deckId, cardId]);
 
   const handleChange = (event) => {
     setCard({
@@ -29,7 +39,7 @@ function EditCard() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const updatedCard = await updateCard(card);
+    const updatedCard = await updateCard({...card, id:cardId});
     history.push(`/decks/${deckId}`);
   };
 

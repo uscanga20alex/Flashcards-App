@@ -1,26 +1,49 @@
-import React, { useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import { createDeck } from '../utils/api';
+import React, { useState, useEffect } from 'react';
+import { Link, useHistory, useParams } from 'react-router-dom';
+import { createCard, readDeck } from '../utils/api';
 
 function AddCard() {
   const history = useHistory();
-  const [newDeck, setNewDeck] = useState({
-    name: '',
-    description: '',
+  const { deckId } = useParams();
+  const [deck, setDeck] = useState(null);
+  const [newCard, setNewCard] = useState({
+    front: '',
+    back: '',
   });
+  
+  useEffect(() => {
+      const abortController = new AbortController();
+      const signal = abortController.signal;
+      async function loadCard(){
+        try{
+          const loadedCard = await readDeck(deckId);
+          setNewCard(loadedCard);
+        }
+        catch (error){
+          if(error.name === "Abort Error"){
+            console.log("Aborted");
+          } else {
+            throw error;
+          }
+        }
+      }
+        loadCard();
+        return() => abortController.abort();
+      }, [deckId]);
 
   const handleChange = (event) => {
-    setNewDeck({
-      ...newDeck,
+    setNewCard({
+      ...newCard,
       [event.target.name]: event.target.value,
     });
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const createdDeck = await createDeck(newDeck);
-    history.push(`/decks/${createdDeck.id}`);
+    const createAdd = await createCard(deckId, newCard);
+    history.push(`/decks/${deckId}`);
   };
+  
 
   return (
     <div>
@@ -29,38 +52,43 @@ function AddCard() {
           <li className="breadcrumb-item">
             <Link to="/">Home</Link>
           </li>
-          <li className="breadcrumb-item active" aria-current="page">
-            Create Deck
+          <li className="breadcrumb-item active">
+          {deck && (
+            <Link to={`/decks/${deckId}`}>{deck.name}</Link>
+            )}
+          </li>
+          <li className='breadcrumb-item active' aria-aria-current="page">
+            Add Card
           </li>
         </ol>
       </nav>
-      <h4>Create Deck</h4>
+      <h4>Create Card</h4>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label htmlFor="name" className="form-label">
-            Name
+            Front
           </label>
-          <input
+          <textarea
             type="text"
             className="form-control"
-            id="name"
-            name="name"
+            id="front"
+            name="front"
             onChange={handleChange}
-            value={newDeck.name}
+            value={newCard.front}
             required
           />
         </div>
         <div className="mb-3">
           <label htmlFor="description" className="form-label">
-            Description
+            Back
           </label>
           <textarea
             className="form-control"
-            id="description"
-            name="description"
+            id="back"
+            name="back"
             rows="4"
             onChange={handleChange}
-            value={newDeck.description}
+            value={newCard.back}
             required
           />
         </div>

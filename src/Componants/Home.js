@@ -1,18 +1,31 @@
 import { useEffect, useState } from "react";
 import React from "react";
-import { Link } from "react-router-dom";
-import { listDecks, deleteDeck } from "../utils/api";
+import { Link, useParams } from "react-router-dom";
+import { listDecks, deleteDeck, readDeck } from "../utils/api";
 
 function Home (){
     const [decks, setDeck] = useState([]);
 
+
     useEffect(() => {
-        const loadDecks = async () => {
-            const loadedDecks = await listDecks();
-            setDeck(loadedDecks);
+        const abortController = new AbortController();
+        const signal = abortController.signal;
+        async function loadDeck(){
+          try{
+            const loadedDeck = await listDecks(signal);
+            setDeck(loadedDeck);
+          }
+          catch (error){
+            if(error.name === "Abort Error"){
+              console.log("Aborted");
+            } else {
+              throw error;
+            }
+          }
         }
-        loadDecks();
-    }, []);
+          loadDeck();
+          return() => abortController.abort();
+        }, []);
 
     const handleDelete = async (deckId) => {
         if (window.confirm("Are you sure you want to delete?")){
@@ -30,8 +43,8 @@ function Home (){
             {decks.map((deck) => (
                 <div key={deck.id}>
                     <h2>{deck.name}</h2>
-                    <p>{deck.description}</p>
-                    <Link to={`/decks/${deck.id}/study`} className="btn btn-secondary">
+                    <p>Number of Cards: {deck.cards.length}</p>
+                    <Link to={`/decks/${deck.id}`} className="btn btn-secondary">
                         View
                     </Link>
                     <Link to={`/decks/${deck.id}/study`} className="btn btn-primary">
@@ -40,9 +53,8 @@ function Home (){
                     <button className="btn btn-danger" onClick={() => handleDelete(deck.id)}>
                         Delete
                     </button>
-                    </div>
+                </div>
             ))}
-            
         </div>
     )
 }

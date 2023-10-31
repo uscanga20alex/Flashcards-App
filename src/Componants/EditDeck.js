@@ -11,12 +11,24 @@ function EditDeck() {
   });
 
   useEffect(() => {
-    const loadDeck = async () => {
-      const loadedDeck = await readDeck(deckId);
-      setDeck(loadedDeck);
-    };
-    loadDeck();
-  }, [deckId]);
+    const abortController = new AbortController();
+    const signal = abortController.signal;
+    async function loadDeck(){
+      try{
+        const loadedDeck = await readDeck(deckId);
+        setDeck(loadedDeck);
+      }
+      catch (error){
+        if(error.name === "Abort Error"){
+          console.log("Aborted");
+        } else {
+          throw error;
+        }
+      }
+    }
+      loadDeck();
+      return() => abortController.abort();
+    }, [deckId]);
 
   const handleChange = (event) => {
     setDeck({
