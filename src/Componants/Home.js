@@ -6,7 +6,6 @@ import { listDecks, deleteDeck, readDeck } from "../utils/api";
 function Home (){
     const [decks, setDeck] = useState([]);
 
-
     useEffect(() => {
         const abortController = new AbortController();
         const signal = abortController.signal;
@@ -30,7 +29,6 @@ function Home (){
     const handleDelete = async (deckId) => {
         if (window.confirm("Are you sure you want to delete?")){
             await deleteDeck(deckId);
-            setDeck(decks.filter((deck) => deck.id !== deckId));
         }
     };
 
@@ -43,7 +41,7 @@ function Home (){
             {decks.map((deck) => (
                 <div key={deck.id}>
                     <h2>{deck.name}</h2>
-                    <p>Number of Cards: {deck.cards.length}</p>
+                    <p>{deck.cards.length} cards</p>
                     <Link to={`/decks/${deck.id}`} className="btn btn-secondary">
                         View
                     </Link>

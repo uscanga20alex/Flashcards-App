@@ -50,7 +50,7 @@ function CreateDeck(){
                 </div>
                 <div className="mb-3">
                     <label htmlFor="description" className="form-label">Description</label>
-                    <input
+                    <textarea
                         className="form-control"
                         id="description"
                         name="description"

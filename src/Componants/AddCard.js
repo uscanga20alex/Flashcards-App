@@ -16,8 +16,8 @@ function AddCard() {
       const signal = abortController.signal;
       async function loadCard(){
         try{
-          const loadedCard = await readDeck(deckId);
-          setNewCard(loadedCard);
+          const loadedDeck = await readDeck(deckId);
+          setDeck(loadedDeck);
         }
         catch (error){
           if(error.name === "Abort Error"){

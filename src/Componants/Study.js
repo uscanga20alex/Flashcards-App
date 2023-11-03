@@ -5,21 +5,20 @@ import { readDeck } from "../utils/api";
 function Study() {
     const { deckId } = useParams();
     const history = useHistory();
-    const [deck, setDeck] = useState();
+    const [deck, setDeck] = useState({});
     const [currentCardIndex, setCurrentCardIndex] = useState(1);
     const [isFlipped, setIsFlipped] = useState(false);
-    //const [card, setCard] = useState({});
+    const [cards, setCards] = useState([]);
 
     useEffect(() => {
         const abortController = new AbortController();
         const signal = abortController.signal;
         async function loadDeck(){
           try{
-            const loadedDeck = await readDeck(deckId);
+            const loadedDeck = await readDeck(deckId, signal);
             setDeck(loadedDeck);
-            /* setCard(loadedDeck.card); why did I need to add this if it's not doing anything */
-          }
-          catch (error){
+            setCards(loadedDeck.cards);
+          } catch (error){
             if(error.name === "Abort Error"){
               console.log("Aborted");
             }
@@ -29,82 +28,102 @@ function Study() {
           return() => abortController.abort();
         }, [deckId]);
 
-        let cards;
-        if (deck) {
-          cards = deck.cards || [];
-        } else {
-          cards = [];
-  }
-
     const handleFlip = () => {
         setIsFlipped(!isFlipped);
     };
 
-    const handleNext = () => {
-        if (currentCardIndex < cards.length - 1){
+    const handleNext = (index, total) => {
+        if (index < total){
             setCurrentCardIndex(currentCardIndex + 1);
             setIsFlipped(false);
         } else {
             const restart = window.confirm("Restart the deck?");
             if(restart){
-                setCurrentCardIndex(0);
+                setCurrentCardIndex(1);
                 setIsFlipped(false);
             } else {
                 history.push('/');
             }
         }
     };
+  
+  function showNextButton(cards, index){
+    if (!isFlipped){
+      return null;
+    }else {
+      return ( 
+         <button
+            onClick={() => handleNext(index + 1, cards.length)}
+            className="btn btn-primary mx-1"
+          >
+                    Next
+                </button>
+          );
+       }
+    }
 
-    if (!deck || cards.length < 3){
-        return(
+    function notEnoughCards() {
+        return (
             <div>
-                <h1>Not enough cards</h1>
-                <Link to={`/decks/${deckId}/cards/new`} className="btn btn-primary">Add Cards</Link>
-                <Link to="/" className="btn btn-secondary">Home</Link>
+                <h2>Not enough cards.</h2>
+                <p>
+                    You need at least 3 cards to study. There are {cards.length}{" "}
+                    cards in this deck.
+                </p>
+                <Link
+                    to={`/decks/${deck.id}/cards/new`}
+                    className="btn btn-primary mx-1"
+                >
+                    Add Cards
+                </Link>
             </div>
         );
     }
+  
+  function enoughCards() {
+    return (
+      <div className="card">
+        {cards.map((card, index) => {
+                    if (index === currentCardIndex - 1) {
+                        return (
+                            <div className="card-body" key={card.id}>
+                                <div className="card-title">
+                                    {`Card ${index + 1} of ${cards.length}`}
+                                </div>
+                                <div className="card-text">
+                                    {isFlipped ? card.back : card.front}
+                                </div>
+                                <button onClick={handleFlip} className="btn btn-secondary mx-1">Flip</button>
+                                {showNextButton(cards, index)}
+                            </div>
+                        );
+                    }
+                })}
+      </div>
+    );
+  }
     return (
         <div>
-            <nav aria-label="breadcrumb">
-                <ol className="breadcrumb">
+            <ol className="breadcrumb">
                 <li className="breadcrumb-item">
                     <Link to="/">Home</Link>
                 </li>
-                <li className="breadcrumb-item active" aria-current="page">
-                    <Link to={`/decks/${deckId}/`}>{deck.name}</Link>
+                <li className="breadcrumb-item">
+                    <Link to={`/decks/${deck.id}`}>{deck.name}</Link>
                 </li>
-                <li className="breadcrubm-item active" aria-current="page">Study</li>
-                </ol>
-            </nav>
-            <div className="container mt-4">
-                <div className="row">
-                    <div className="col-12">
-                        <h2>Study: {deck.name}</h2>
-                    </div>
-                </div>
-            <div className="row">
-                <div className="col-12">
-                    <div className="card">
-                        <div className="card-body">
-                            <h5 className="card-title">
-                                Card {currentCardIndex + 1} of {cards.length}
-                            </h5>
-                            <p className="card-text">
-                                {isFlipped ? cards[currentCardIndex].back : cards[currentCardIndex].front}
-                            </p>
-                            <button className="btn btn-secondary" onClick={handleFlip}>
-                                {isFlipped ? "Flip Back" : "Flip"}
-                            </button>
-                            <button className="btn btn-primary" onClick={handleNext}>
-                                {currentCardIndex === cards.length - 1 ? "Restart" : "Next"}
-                            </button>
-                        </div>
-                    </div>
+                <li className="breadcrumb-item active">Study</li>
+            </ol>
+            <div>
+                <h2>{`${deck.name}: Study`}</h2>
+                <div>
+                    {cards.length === 0
+                        ? notEnoughCards()
+                        : cards.length > 2
+                        ? enoughCards()
+                        : notEnoughCards()}
                 </div>
             </div>
         </div>
-    </div>
   );
 }
 
