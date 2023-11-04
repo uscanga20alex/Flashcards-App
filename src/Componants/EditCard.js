@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams, useHistory } from 'react-router-dom';
 import { readDeck, readCard, updateCard } from '../utils/api';
+import Form from '/From';
 
 function EditCard() {
   const history = useHistory();
@@ -30,18 +31,6 @@ function EditCard() {
       return() => abortController.abort();
     }, [deckId, cardId]);
 
-  const handleChange = (event) => {
-    setCard({
-      ...card,
-      [event.target.name]: event.target.value,
-    });
-  };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const updatedCard = await updateCard({...card, id:cardId});
-    history.push(`/decks/${deckId}`);
-  };
 
   return (
     <div>
@@ -59,42 +48,7 @@ function EditCard() {
         </ol>
       </nav>
       <h4>Edit Card</h4>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label htmlFor="front" className="form-label">
-            Front
-          </label>
-          <textarea
-            className="form-control"
-            id="front"
-            name="front"
-            rows="4"
-            onChange={handleChange}
-            value={card.front}
-            required
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="back" className="form-label">
-            Back
-          </label>
-          <textarea
-            className="form-control"
-            id="back"
-            name="back"
-            rows="4"
-            onChange={handleChange}
-            value={card.back}
-            required
-          />
-        </div>
-        <Link to={`/decks/${deckId}`} className="btn btn-secondary mr-2">
-          Done
-        </Link>
-        <button type="submit" className="btn btn-primary">
-          Submit
-        </button>
-      </form>
+        <Form />
     </div>
   );
 }
