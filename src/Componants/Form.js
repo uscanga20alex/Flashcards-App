@@ -1,12 +1,37 @@
-import { Link } from 'react-router-dom';
+import { Link, useHistory, useParams } from 'react-router-dom';
+import React, { useState } from 'react';
 //what else do I need to import
 
 function Form(){
+    const history = useHistory();
+    const { deckId } = useParams(); 
     const [deck, setDeck] = useState(null);
     const [card, setCard] = useState({
         front: '',
         back: '',
     });
+
+    useEffect(() => {
+        const abortController = new AbortController();
+        const signal = abortController.signal;
+        async function loadDeckAndCards(){
+          try{
+            const loadedDeck = await readDeck(deckId);
+            const loadedCard = await readCard(cardId);
+            setDeck(loadedDeck);
+            setCard(loadedCard);
+          }
+          catch (error){
+            if(error.name === "Abort Error"){
+              console.log("Aborted");
+            } else {
+              throw error;
+            }
+          }
+        }
+          loadDeckAndCards();
+          return() => abortController.abort();
+        }, [deckId, cardId]);
     const handleChange = (event) => {
         setCard({
         ...card,
