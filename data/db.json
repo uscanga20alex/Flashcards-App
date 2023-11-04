@@ -65,6 +65,11 @@
       "name": "setgset",
       "description": "ethsetywh ",
       "id": 9
+    },
+    {
+      "name": "new test",
+      "description": "made form into it's own file and rendered it to edit card and add card. Testing time",
+      "id": 10
     }
   ],
   "cards": [
