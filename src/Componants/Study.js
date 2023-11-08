@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams, Link, useHistory } from "react-router-dom";
 import { readDeck } from "../utils/api";
 
@@ -12,10 +12,9 @@ function Study() {
 
     useEffect(() => {
         const abortController = new AbortController();
-        const signal = abortController.signal;
         async function loadDeck(){
           try{
-            const loadedDeck = await readDeck(deckId, signal);
+            const loadedDeck = await readDeck(deckId);
             setDeck(loadedDeck);
             setCards(loadedDeck.cards);
           } catch (error){

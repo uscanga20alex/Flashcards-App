@@ -1,6 +1,6 @@
 import { useEffect, useState} from "react";
-import { useParams, Link, useHistory } from "react-router-dom";
 import { readDeck, deleteDeck } from "../utils/api";
+import { useParams, Link, useHistory } from "react-router-dom";
 
 function Deck(){
     const { deckId } = useParams();
@@ -10,7 +10,6 @@ function Deck(){
 
     useEffect(() => {
       const abortController = new AbortController();
-      const signal = abortController.signal;
       async function loadDeck(){
         try{
           const loadedDeck = await readDeck(deckId);

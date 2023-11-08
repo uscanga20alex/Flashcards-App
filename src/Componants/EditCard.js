@@ -4,14 +4,12 @@ import { readDeck, readCard, updateCard } from '../utils/api';
 import Form from './Form';
 
 function EditCard() {
-  const history = useHistory();
   const { deckId, cardId } = useParams();
   const [deck, setDeck] = useState({});
   const [card, setCard] = useState({ front: '', back: '', });
 
   useEffect(() => {
     const abortController = new AbortController();
-    const signal = abortController.signal;
     async function loadDeckAndCards(){
       try{
         const loadedDeck = await readDeck(deckId);

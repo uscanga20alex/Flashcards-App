@@ -12,7 +12,6 @@ function EditDeck() {
 
   useEffect(() => {
     const abortController = new AbortController();
-    const signal = abortController.signal;
     async function loadDeck(){
       try{
         const loadedDeck = await readDeck(deckId);

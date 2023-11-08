@@ -4,17 +4,11 @@ import { createCard, readDeck } from '../utils/api';
 import Form from './Form';
 
 function AddCard() {
-  const history = useHistory();
   const { deckId } = useParams();
   const [deck, setDeck] = useState(null);
-  const [card, setCard] = useState({
-    front: '',
-    back: '',
-  });
   
   useEffect(() => {
       const abortController = new AbortController();
-      const signal = abortController.signal;
       async function loadCard(){
         try{
           const loadedDeck = await readDeck(deckId);
@@ -48,7 +42,7 @@ function AddCard() {
             <Link to={`/decks/${deckId}`}>{deck.name}</Link>
             )}
           </li>
-          <li className='breadcrumb-item active' aria-aria-current="page">
+          <li className='breadcrumb-item active' aria-current="page">
             Add Card
           </li>
         </ol>

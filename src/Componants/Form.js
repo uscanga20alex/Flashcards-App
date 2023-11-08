@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+
 import { Link, useHistory, useParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import { readDeck, readCard, updateCard } from '../utils/api';
 //a problem is occuring here and I am not sure what it is.
 
@@ -14,7 +15,6 @@ function Form(){
 
     useEffect(() => {
         const abortController = new AbortController();
-        const signal = abortController.signal;
         async function loadDeckAndCards(){
           try{
             const loadedDeck = await readDeck(deckId);
@@ -33,6 +33,7 @@ function Form(){
           loadDeckAndCards();
           return() => abortController.abort();
         }, [deckId, cardId]);
+        
     const handleChange = (event) => {
         setCard({
         ...card,

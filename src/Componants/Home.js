@@ -1,16 +1,15 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { listDecks, deleteDeck, readDeck } from "../utils/api";
+import { Link } from "react-router-dom";
+import { listDecks, deleteDeck } from "../utils/api";
 
 function Home (){
     const [decks, setDeck] = useState([]);
 
     useEffect(() => {
         const abortController = new AbortController();
-        const signal = abortController.signal;
         async function loadDeck(){
           try{
-            const loadedDeck = await listDecks(signal);
+            const loadedDeck = await listDecks();
             setDeck(loadedDeck);
           }
           catch (error){
