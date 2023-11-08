@@ -1,8 +1,8 @@
 
-import { Link, useHistory, useParams } from 'react-router-dom';
-import React, { useState } from 'react';
+import { Link, useHistory, useParams, useEffect } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 import { readDeck, readCard, updateCard } from '../utils/api';
-//what else do I need to import
+//a problem is occuring here and I am not sure what it is.
 
 function Form(){
     const history = useHistory();
