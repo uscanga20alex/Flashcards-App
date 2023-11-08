@@ -1,6 +1,5 @@
-
-import { Link, useHistory, useParams, useEffect } from 'react-router-dom';
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { Link, useHistory, useParams } from 'react-router-dom';
 import { readDeck, readCard, updateCard } from '../utils/api';
 //a problem is occuring here and I am not sure what it is.
 

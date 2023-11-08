@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { createCard, readDeck } from '../utils/api';
 import Form from './Form';
@@ -18,7 +18,9 @@ function AddCard() {
       async function loadCard(){
         try{
           const loadedDeck = await readDeck(deckId);
+          const newCard = await readCard(deckId, { front:'', back:' '});
           setDeck(loadedDeck);
+          setCard(newCard)
         }
         catch (error){
           if(error.name === "Abort Error"){

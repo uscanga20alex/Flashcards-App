@@ -1,6 +1,6 @@
-import React, { useEffect, useState} from "react";
+import { useEffect, useState} from "react";
+import { useParams, Link, useHistory } from "react-router-dom";
 import { readDeck, deleteDeck } from "../utils/api";
-import { useParams, Link, useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 function Deck(){
     const { deckId } = useParams();
