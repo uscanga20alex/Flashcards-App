@@ -5,7 +5,7 @@ import { readDeck, readCard, updateCard } from '../utils/api';
 
 function Form(){
     const history = useHistory();
-    const { deckId } = useParams(); 
+    const { deckId, cardId } = useParams(); 
     const [deck, setDeck] = useState(null);
     const [card, setCard] = useState({
         front: '',
@@ -41,9 +41,17 @@ function Form(){
     };
 
     const handleSubmit = async (event) => {
-    event.preventDefault();
-    const updatedCard = await updateCard({...card, id:cardId});
-    history.push(`/decks/${deckId}`);
+      event.preventDefault();
+      const updatedCardData = {
+        front: card.front,
+        back: card.back,
+      };
+      try{
+        await updateCard(updatedCardData);
+        history.push(`/decks/${deckId}`);
+      } catch (error) {
+        console.error('abort error')
+      }
     };
 
     return (
