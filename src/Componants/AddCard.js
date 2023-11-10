@@ -1,18 +1,19 @@
 import { useState, useEffect } from 'react';
-import { Link, useHistory, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { createCard, readDeck } from '../utils/api';
 import Form from './Form';
 
 function AddCard() {
   const { deckId } = useParams();
   const [deck, setDeck] = useState(null);
+  const [card, setCard] = useState();
   
   useEffect(() => {
       const abortController = new AbortController();
       async function loadCard(){
         try{
           const loadedDeck = await readDeck(deckId);
-          const newCard = await readCard(deckId, { front:'', back:' '});
+          const newCard = await createCard(deckId, { front:'', back:' '});
           setDeck(loadedDeck);
           setCard(newCard)
         }

@@ -59,7 +59,7 @@ function Deck(){
                 <Link to={`/decks/${deckId}/study`} className="btn btn-primary">
                     Study
                 </Link>
-                <Link to={`/decks${deckId}/cards/new`} className="btn btn-primary">
+                <Link to={`/decks/${deckId}/cards/new`} className="btn btn-primary">
                     Add Cards
                 </Link>
                 <button className="btn btn-danger" onClick={handleDelete}>Delete</button>
