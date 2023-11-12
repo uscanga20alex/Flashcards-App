@@ -67,13 +67,15 @@ function Deck(){
             <h2>Cards</h2>
             <ul className="list-group">
                 {deck && deck.cards.map((card) => (
-                    <li className="list-group-item" key={card.id}>
-                    <p>{card.front}</p>
-                    <p>{card.back}</p>
-                    <Link to={`/decks/${deckId}/cards/${card.id}/edit`} className="btn btn-secondary">
+                    <li key={card.id} className="card-container" >
+                    <p>Front: {card.front}</p>
+                    <p>Back: {card.back}</p>
+                    <div className="card-options">
+                       <Link to={`/decks/${deckId}/cards/${card.id}/edit`} className="btn btn-secondary">
                         Edit Card
-                    </Link>
-                    <button className="btn btn-danger" onClick={handleDelete}>Delete</button>
+                        </Link> 
+                        <button className="btn btn-danger" onClick={handleDelete}>Delete</button>
+                    </div> 
                 </li>
                 ))} 
             </ul>

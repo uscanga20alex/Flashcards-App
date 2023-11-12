@@ -1,7 +1,7 @@
 
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { readDeck, updateCard } from '../utils/api';
+import { createCard, readDeck, updateCard } from '../utils/api';
 //a problem is occuring here and I am not sure what it is.
 
 function Form(){
@@ -41,16 +41,18 @@ function Form(){
 
     const handleSubmit = async (event) => {
       event.preventDefault();
-      const updatedCardData = {
-        front: card.front,
-        back: card.back,
-      };
-      try{
-        await updateCard(deckId, cardId, updatedCardData);
-        history.push(`/decks/${deckId}`);
-      } catch (error) {
-        console.error('abort error')
-      }
+      await createCard(deckId, card);
+      setCard({front:'', back:''});
+      // const updatedCardData = {
+      //   front: card.front,
+      //   back: card.back,
+      // };
+      // try{
+      //   await updateCard(deckId, cardId, updatedCardData);
+      //   history.push(`/decks/${deckId}`);
+      // } catch (error) {
+      //   console.error('abort error')
+      // }
     };
 
     return (
