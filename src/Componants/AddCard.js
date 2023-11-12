@@ -9,25 +9,25 @@ function AddCard() {
   const [card, setCard] = useState();
   
   useEffect(() => {
-      const abortController = new AbortController();
-      async function loadCard(){
+    const deckAbort = new AbortController();
+
+    async function loadDeck() {
         try{
-          const loadedDeck = await readDeck(deckId);
-          const newCard = await createCard(deckId, { front:'', back:' '});
-          setDeck(loadedDeck);
-          setCard(newCard)
+            const pullDeck = await readDeck(deckId, deckAbort.signal);
+            setDeck(pullDeck);
+            //setCard(pullDeck.cards)
         }
-        catch (error){
-          if(error.name === "Abort Error"){
-            console.log("Aborted");
-          } else {
-            throw error;
-          }
+        catch (error) {
+            console.log("error creating deck list");
         }
-      }
-        loadCard();
-        return() => abortController.abort();
-      }, [deckId]);
+
+        return () => {
+            deckAbort.abort();
+        }
+    }
+
+    loadDeck();
+}, [deckId])
 
   
 
