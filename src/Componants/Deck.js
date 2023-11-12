@@ -68,8 +68,8 @@ function Deck(){
             <ul className="list-group">
                 {deck && deck.cards.map((card) => (
                     <li key={card.id} className="card-container" >
-                    <p>Front: {card.front}</p>
-                    <p>Back: {card.back}</p>
+                    <p>{card.front}</p>
+                    <p>{card.back}</p>
                     <div className="card-options">
                        <Link to={`/decks/${deckId}/cards/${card.id}/edit`} className="btn btn-secondary">
                         Edit Card

@@ -11,22 +11,24 @@ function AddCard() {
   useEffect(() => {
     const deckAbort = new AbortController();
 
-    async function loadDeck() {
+    async function loadDeckAndCards() {
         try{
-            const pullDeck = await readDeck(deckId, deckAbort.signal);
-            setDeck(pullDeck);
-            //setCard(pullDeck.cards)
+            const loadedDeck = await readDeck(deckId);
+            setDeck(loadedDeck);
         }
         catch (error) {
+          if (error.name === "Abort Error"){
             console.log("error creating deck list");
+          } else {
+            throw error;
+          }
+            
         }
 
-        return () => {
-            deckAbort.abort();
-        }
+        return () => AbortController.abort();
     }
 
-    loadDeck();
+    loadDeckAndCards();
 }, [deckId])
 
   

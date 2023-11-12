@@ -56,7 +56,7 @@ function Form(){
     };
 
     return (
-        <form>
+        <form onSubmit={handleSubmit}>
         <div className="mb-3">
         <label htmlFor="front" className="form-label">
             Front
@@ -69,7 +69,6 @@ function Form(){
             onChange={handleChange}
             value={card.front}
             required
-            onSubmit={handleSubmit}
         />
         </div>
         <div className="mb-3">
@@ -84,7 +83,6 @@ function Form(){
             onChange={handleChange}
             value={card.back}
             required
-            onSubmit={handleSubmit}
         />
         </div>
         <Link to="/" className="btn btn-secondary mr-2">
