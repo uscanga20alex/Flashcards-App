@@ -1,11 +1,6 @@
 {
   "decks": [
     {
-      "name": "oau",
-      "description": "aojoajgoija",
-      "id": 3
-    },
-    {
       "name": "agfagasgf",
       "description": "testing time",
       "id": 4,
@@ -70,12 +65,6 @@
       "id": 1
     },
     {
-      "front": "afdkjoj``",
-      "back": "jaoaomoag",
-      "deckId": 3,
-      "id": 8
-    },
-    {
       "name": "asfq34fwaf",
       "description": "2awrgfaerg a",
       "id": 6,
@@ -127,34 +116,10 @@
       "id": 17
     },
     {
-      "front": "",
-      "back": " ",
-      "deckId": 3,
-      "id": 18
-    },
-    {
-      "front": "",
-      "back": " ",
-      "deckId": 3,
-      "id": 19
-    },
-    {
-      "front": "",
-      "back": " ",
-      "deckId": 3,
-      "id": 20
-    },
-    {
-      "front": "",
-      "back": " ",
-      "deckId": 3,
-      "id": 21
-    },
-    {
       "front": "1",
-      "back": "11/12/23 @ 16:22",
-      "deckId": 3,
-      "id": 22
+      "back": "11/12 @ 16:26",
+      "deckId": 4,
+      "id": 18
     }
   ]
 }

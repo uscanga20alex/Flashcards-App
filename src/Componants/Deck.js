@@ -67,7 +67,7 @@ function Deck(){
             <h2>Cards</h2>
             <ul className="list-group">
                 {deck && deck.cards.map((card) => (
-                    <li key={card.id} className="card-container" >
+                    <li key={card.id} className="list-group-item" >
                     <p>{card.front}</p>
                     <p>{card.back}</p>
                     <div className="card-options">
