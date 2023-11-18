@@ -16,12 +16,14 @@ function Form(){
     useEffect(() => {
         const abortController = new AbortController();
         async function loadDeckAndCards(){
-          try{
+          try {
             const loadedDeck = await readDeck(deckId);
-            const loadedCard = await readCard(cardId);
             setDeck(loadedDeck);
+            if (cardId) {
+            const loadedCard = await readCard(cardId);
             setCard(loadedCard);
-          }
+            }
+            }
           catch (error){
             if(error.name === "Abort Error"){
               console.log("Aborted");
